@@ -40,14 +40,28 @@ class Especie(models.Model):
     def __str__(self):
         return self.nome
 
+class Funcionario(models.Model):
+    nome = models.CharField(max_length=100)
+    cargo = models.CharField(max_length=100)
+
+    def __str__(self):
+        return f"{self.nome} - {self.cargo}"
+    
 class Cercado(models.Model):
     nome = models.CharField(max_length=100)
     voltagem_cerca = models.IntegerField(help_text="Voltagem atual em kV")
-    dimensao = models.CharField(max_length=100, help_text="Dimensões do cercado (ex: 20x30m)")
+    dimensao_m2 = models.FloatField(help_text="Dimensão em m2")
+    
+    # Nova Chave Estrangeira (1:N)
+    funcionario = models.ForeignKey(
+        Funcionario,
+        on_delete=models.CASCADE, # Impede demitir/apagar o funcionário se ele for o único responsável por um cercado
+        related_name='cercados'
+    )
 
     def __str__(self):
-        return f"{self.nome} (Energia: {'ON' if self.energia_ativa else 'OFF'})"
-
+        return f"{self.nome} (Resp: {self.funcionario.nome})"
+    
 class Dinossauro(models.Model):
     nome = models.CharField(max_length=100)
     data_nascimento = models.CharField(max_length=100)
@@ -66,17 +80,3 @@ class Dinossauro(models.Model):
 
     def __str__(self):
         return f"{self.nome} ({self.especie.nome})"
-
-class Funcionario(models.Model):
-    nome = models.CharField(max_length=100)
-    cargo = models.CharField(max_length=100)
-    
-    # Chave Muitos-para-Muitos (N:N)
-    funcionario_responsavel = models.ForeignKey(
-            Cercado, 
-            on_delete=models.CASCADE, 
-            related_name='cercados'
-    )
-
-    def __str__(self):
-        return f"{self.nome} - {self.cargo}"
