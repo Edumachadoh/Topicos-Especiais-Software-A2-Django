@@ -1,6 +1,6 @@
-# 🚗 API RESTful - Catálogo de Veículos (Django)
+#  API RESTful - Jurassic Park (Django)
 
-Uma API RESTful robusta desenvolvida em Python para o gerenciamento de Marcas e Carros. Este projeto implementa um relacionamento relacional de (1:N) e fornece operações completas de CRUD (Create, Read, Update, Delete) utilizando os métodos semânticos do protocolo HTTP.
+Uma API RESTful robusta desenvolvida em Python para o gerenciamento de um Parque de Dinossauros. Este projeto implementa relacionamento e fornece operações completas de CRUD (Create, Read, Update, Delete) utilizando os métodos semânticos do protocolo HTTP.
 
 ## 🛠️ Tecnologias Utilizadas e Seus Propósitos
 
@@ -8,7 +8,7 @@ Uma API RESTful robusta desenvolvida em Python para o gerenciamento de Marcas e 
 * **[Django](https://www.djangoproject.com/):** Framework web principal. Fornece a base do sistema, o mapeamento objeto-relacional (ORM) para comunicação segura com o banco de dados e o sistema de migrações automáticas.
 * **[Django REST Framework (DRF)](https://www.django-rest-framework.org/):** Extensão poderosa do Django construída especificamente para APIs. Facilita a criação de rotas, serialização de dados (conversão para JSON) e visualização dos endpoints no navegador.
 * **[SQLite](https://www.sqlite.org/):** Banco de dados relacional leve utilizado como padrão para o ambiente de desenvolvimento, dispensando instalações complexas.
-* **[django-filter](https://django-filter.readthedocs.io/):** Biblioteca integrada ao DRF para permitir a criação de filtros avançados via URL (ex: filtrar carros por faixa de preço ou parte do nome).
+* **[django-filter](https://django-filter.readthedocs.io/):** Biblioteca integrada ao DRF para permitir a criação de filtros avançados via URL (ex: filtrar dinossauros por faixa de preço ou parte do nome).
 * **[python-dotenv](https://saurabh-kumar.com/python-dotenv/):** Gerenciador de variáveis de ambiente. Garante a segurança do sistema ao ocultar credenciais sensíveis (como a `SECRET_KEY` e senhas de banco) em um arquivo `.env` que não é enviado ao GitHub.
 
 ---
@@ -27,7 +27,7 @@ Atua como a "Alfândega" da API. É a ponte entre a internet (texto JSON) e o si
 
 ### 3. Camada de Negócio (Services) - `services.py`
 O "Cérebro" das operações complexas. 
-* **Função:** Isola as regras de negócio das rotas. Se a criação de um carro exigir verificações de estoque, cálculos de impostos ou processos externos, essa lógica acontece aqui, mantendo a camada de visualização limpa e focada apenas no tráfego HTTP.
+* **Função:** Isola as regras de negócio das rotas. Se a criação de um dinossauro exigir verificações de estoque, cálculos de impostos ou processos externos, essa lógica acontece aqui, mantendo a camada de visualização limpa e focada apenas no tráfego HTTP.
 
 ### 4. Camada de Visualização (Views/Controllers) - `views.py`
 O "Recepcionista" da API. Utiliza os `ModelViewSets` do DRF.
@@ -45,4 +45,7 @@ Siga o passo a passo abaixo para configurar o ambiente virtual, instalar depend�
 ### 1. Clonar o Repositório
 ```bash
 git clone [https://github.com/SeuUsuario/SeuRepositorio.git](https://github.com/SeuUsuario/SeuRepositorio.git)
+
 cd SeuRepositorio
+
+python manage.py runserver
