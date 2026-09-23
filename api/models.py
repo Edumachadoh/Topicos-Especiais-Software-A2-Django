@@ -25,7 +25,7 @@ class Carro(models.Model):
     def __str__(self):
         return self.modelo
     
-# novas classes, não retiradas para não dar erro
+# novas classes, antigas não retiradas para não dar erro
 class Especie(models.Model):
     DIETA_CHOICES = [
         ('C', 'Carnívoro'),
@@ -55,7 +55,7 @@ class Cercado(models.Model):
     # Nova Chave Estrangeira (1:N)
     funcionario = models.ForeignKey(
         Funcionario,
-        on_delete=models.CASCADE, # Impede demitir/apagar o funcionário se ele for o único responsável por um cercado
+        on_delete=models.CASCADE, 
         related_name='cercados'
     )
 

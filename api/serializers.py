@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import Marca, Carro
+
 class MarcaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Marca
@@ -27,7 +28,7 @@ class CarroSerializer(serializers.ModelSerializer):
         ]
         
         
-# serializer de dinossauros
+# serializer de dinossauros (NOVOS)
 from .models import Especie, Cercado, Dinossauro, Funcionario
 
 class EspecieSerializer(serializers.ModelSerializer):
