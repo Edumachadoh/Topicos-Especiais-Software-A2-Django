@@ -1,0 +1,93 @@
+<component name="InspectionProjectProfileManager">
+  <profile version="1.0">
+    <option name="myName" value="Project Default" />
+    <inspection_tool class="PyPackageRequirementsInspection" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="ignoredPackages">
+        <list>
+          <option value="absl-py" />
+          <option value="aiohttp" />
+          <option value="aiohttp-retry" />
+          <option value="aiosignal" />
+          <option value="alembic" />
+          <option value="asttokens" />
+          <option value="attrs" />
+          <option value="blinker" />
+          <option value="certifi" />
+          <option value="cffi" />
+          <option value="charset-normalizer" />
+          <option value="click" />
+          <option value="colorama" />
+          <option value="comm" />
+          <option value="contourpy" />
+          <option value="cryptography" />
+          <option value="cycler" />
+          <option value="decorator" />
+          <option value="executing" />
+          <option value="Flask" />
+          <option value="flask-marshmallow" />
+          <option value="Flask-Migrate" />
+          <option value="Flask-SQLAlchemy" />
+          <option value="flatbuffers" />
+          <option value="fonttools" />
+          <option value="frozenlist" />
+          <option value="idna" />
+          <option value="ipython" />
+          <option value="ipython_pygments_lexers" />
+          <option value="ipywidgets" />
+          <option value="jax" />
+          <option value="jaxlib" />
+          <option value="jedi" />
+          <option value="Jinja2" />
+          <option value="jupyter-ui-poll" />
+          <option value="jupyterlab_widgets" />
+          <option value="kiwisolver" />
+          <option value="Mako" />
+          <option value="MarkupSafe" />
+          <option value="marshmallow" />
+          <option value="marshmallow-sqlalchemy" />
+          <option value="matplotlib" />
+          <option value="matplotlib-inline" />
+          <option value="mediapipe" />
+          <option value="ml_dtypes" />
+          <option value="msal" />
+          <option value="multidict" />
+          <option value="numpy" />
+          <option value="opencv-contrib-python" />
+          <option value="opencv-python" />
+          <option value="opt_einsum" />
+          <option value="packaging" />
+          <option value="pandas" />
+          <option value="parso" />
+          <option value="pillow" />
+          <option value="powerbiclient" />
+          <option value="prompt_toolkit" />
+          <option value="protobuf" />
+          <option value="pure_eval" />
+          <option value="py4j" />
+          <option value="pycparser" />
+          <option value="pygame" />
+          <option value="Pygments" />
+          <option value="PyJWT" />
+          <option value="PyMySQL" />
+          <option value="pyparsing" />
+          <option value="pyspark" />
+          <option value="python-dateutil" />
+          <option value="pytz" />
+          <option value="requests" />
+          <option value="scipy" />
+          <option value="six" />
+          <option value="sounddevice" />
+          <option value="stack-data" />
+          <option value="traitlets" />
+          <option value="tzdata" />
+          <option value="urllib3" />
+          <option value="wcwidth" />
+          <option value="Werkzeug" />
+          <option value="widgetsnbextension" />
+          <option value="yarl" />
+          <option value="python-dotenv" />
+        </list>
+      </option>
+    </inspection_tool>
+  </profile>
+</component>

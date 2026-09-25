@@ -1,4 +1,5 @@
-from .models import Marca, Carro
+from .models import Marca, Carro, Funcionario
+
 
 class MarcaService:
     @staticmethod
@@ -19,4 +20,12 @@ class CarroService:
             ano=ano,
             preco=preco,
             marca=marca
+        )
+
+class FuncionarioService:
+    @staticmethod
+    def criar(nome, cargo):
+        return Funcionario.objects.create(
+            nome=nome,
+            cargo=cargo
         )

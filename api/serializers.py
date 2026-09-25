@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import Marca, Carro
 
+
 class MarcaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Marca
@@ -9,6 +10,8 @@ class MarcaSerializer(serializers.ModelSerializer):
             "nome",
             "pais_origem",
         ]
+
+
 class CarroSerializer(serializers.ModelSerializer):
     marca = MarcaSerializer(read_only=True)
     marca_id = serializers.PrimaryKeyRelatedField(
@@ -16,6 +19,7 @@ class CarroSerializer(serializers.ModelSerializer):
         queryset=Marca.objects.all(),
         write_only=True
     )
+
     class Meta:
         model = Carro
         fields = [
@@ -26,29 +30,31 @@ class CarroSerializer(serializers.ModelSerializer):
             "marca",
             "marca_id",
         ]
-        
-        
+
+
 # serializer de dinossauros (NOVOS)
 from .models import Especie, Cercado, Dinossauro, Funcionario
+
 
 class EspecieSerializer(serializers.ModelSerializer):
     class Meta:
         model = Especie
         fields = ['id', 'nome', 'dieta', 'nivel_periculosidade']
 
+
 class FuncionarioSerializer(serializers.ModelSerializer):
     class Meta:
         model = Funcionario
         fields = ['id', 'nome', 'cargo']
-        
+
 
 class CercadoSerializer(serializers.ModelSerializer):
     # Leitura: Traz os dados do funcionário ao buscar um cercado
-    funcionario_responsavel = FuncionarioSerializer(read_only=True)
-    
+    funcionario = FuncionarioSerializer(read_only=True)
+
     # Escrita: Recebe apenas o ID do funcionário ao criar/atualizar um cercado
-    funcionario_responsavel_id = serializers.PrimaryKeyRelatedField(
-        source='funcionario_responsavel',
+    funcionario_id = serializers.PrimaryKeyRelatedField(
+        source='funcionario',
         queryset=Funcionario.objects.all(),
         write_only=True
     )
@@ -56,14 +62,15 @@ class CercadoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Cercado
         fields = [
-            'id', 
-            'nome', 
-            'voltagem_cerca', 
-            'dimensao_m2', 
-            'funcionario_responsavel', 
-            'funcionario_responsavel_id'
+            'id',
+            'nome',
+            'voltagem_cerca',
+            'dimensao_m2',
+            'funcionario',
+            'funcionario_id'
         ]
-        
+
+
 class DinossauroSerializer(serializers.ModelSerializer):
     # Campos aninhados para LEITURA (traz o objeto completo no GET)
     especie = EspecieSerializer(read_only=True)
@@ -84,11 +91,11 @@ class DinossauroSerializer(serializers.ModelSerializer):
     class Meta:
         model = Dinossauro
         fields = [
-            'id', 
-            'nome', 
-            'data_nascimento', 
-            'especie', 
-            'especie_id', 
-            'cercado', 
+            'id',
+            'nome',
+            'data_nascimento',
+            'especie',
+            'especie_id',
+            'cercado',
             'cercado_id'
         ]
