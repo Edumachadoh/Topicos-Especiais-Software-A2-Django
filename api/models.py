@@ -23,8 +23,8 @@ class Carro(models.Model):
     )
 
     def __str__(self):
-        return self.modelo
-    
+        return f"{self.modelo} ({self.ano})"
+
 # novas classes, antigas não retiradas para não dar erro
 class Especie(models.Model):
     DIETA_CHOICES = [
@@ -38,7 +38,7 @@ class Especie(models.Model):
     nivel_periculosidade = models.IntegerField(help_text="Escala de 1 a 10")
 
     def __str__(self):
-        return self.nome
+        return f"{self.nome} ({self.dieta}) - Periculosidade: {self.nivel_periculosidade}"
 
 class Funcionario(models.Model):
     nome = models.CharField(max_length=100)
@@ -61,7 +61,7 @@ class Cercado(models.Model):
 
     def __str__(self):
         return f"{self.nome} (Resp: {self.funcionario.nome})"
-    
+
 class Dinossauro(models.Model):
     nome = models.CharField(max_length=100)
     data_nascimento = models.CharField(max_length=100)
