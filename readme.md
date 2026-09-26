@@ -44,8 +44,30 @@ Siga o passo a passo abaixo para configurar o ambiente virtual, instalar depend�
 
 ### 1. Clonar o Repositório
 ```bash
-git clone [https://github.com/SeuUsuario/SeuRepositorio.git](https://github.com/SeuUsuario/SeuRepositorio.git)
-
+git clone https://github.com/SeuUsuario/SeuRepositorio.git
 cd SeuRepositorio
+```
 
+### 2. Criar e Ativar o Ambiente Virtual
+```bash
+python -m venv .venv
+
+.venv\Scripts\Activate
+```
+
+### 3. Instalar as Dependências
+```bash
+pip install -r requirements.txt
+```
+
+### 4. Configurar Variáveis de Ambiente
+Crie um arquivo `.env` na raiz do projeto com sua própria `SECRET_KEY`:
+```
+SECRET_KEY=sua-chave-secreta-aqui
+```
+
+### 5. Aplicar as Migrações e Rodar o Servidor
+```bash
+python manage.py migrate
 python manage.py runserver
+```

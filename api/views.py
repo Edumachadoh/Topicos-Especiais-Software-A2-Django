@@ -10,6 +10,7 @@ from api.serializers import (
     CercadoSerializer,
     DinossauroSerializer,
 )
+from api.filters import EspecieFilter, DinossauroFilter
 
 
 class CarroViewSet(viewsets.ModelViewSet):
@@ -37,9 +38,9 @@ class EspecieViewSet(viewsets.ModelViewSet):
     queryset = Especie.objects.all()
     serializer_class = EspecieSerializer
 
-    # Habilita filtro simples por dieta (ex: /api/especies/?dieta=C)
+    # Habilita filtros por dieta (igualdade), nome (icontains) e faixa de periculosidade
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['dieta']
+    filterset_class = EspecieFilter
 
 
 class CercadoViewSet(viewsets.ModelViewSet):
@@ -56,4 +57,4 @@ class DinossauroViewSet(viewsets.ModelViewSet):
     serializer_class = DinossauroSerializer
 
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['especie', 'cercado']
+    filterset_class = DinossauroFilter
