@@ -51,7 +51,26 @@ class CercadoService:
 
 class DinossauroService:
     @staticmethod
+    def validar_dieta_compativel(especie, cercado):
+        """Carnívoros não podem dividir cercado com Herbívoros/Onívoros, e vice-versa."""
+        dinos_no_cercado = Dinossauro.objects.filter(cercado=cercado).select_related('especie')
+
+        for dino in dinos_no_cercado:
+            dieta_existente = dino.especie.dieta
+            eh_carnivoro_novo = especie.dieta == 'C'
+            eh_carnivoro_existente = dieta_existente == 'C'
+
+            if eh_carnivoro_novo != eh_carnivoro_existente:
+                raise ValueError(
+                    f"Não é possível colocar um dinossauro de dieta '{especie.get_dieta_display()}' "
+                    f"no cercado '{cercado.nome}', pois já existe lá o dinossauro "
+                    f"'{dino.nome}', de dieta '{dino.especie.get_dieta_display()}'."
+                )
+
+    @staticmethod
     def criar(nome, data_nascimento, especie, cercado):
+        DinossauroService.validar_dieta_compativel(especie, cercado)
+
         return Dinossauro.objects.create(
             nome=nome,
             data_nascimento=data_nascimento,

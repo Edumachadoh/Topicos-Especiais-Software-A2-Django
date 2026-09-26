@@ -1,5 +1,6 @@
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets
+from rest_framework.exceptions import ValidationError
 
 from api.models import Carro, Marca, Funcionario, Especie, Cercado, Dinossauro
 from api.serializers import (
@@ -84,4 +85,7 @@ class DinossauroViewSet(viewsets.ModelViewSet):
     filterset_class = DinossauroFilter
 
     def perform_create(self, serializer):
-        serializer.instance = DinossauroService.criar(**serializer.validated_data)
+        try:
+            serializer.instance = DinossauroService.criar(**serializer.validated_data)
+        except ValueError as e:
+            raise ValidationError(str(e))
