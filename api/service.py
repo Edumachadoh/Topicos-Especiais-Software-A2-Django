@@ -1,4 +1,4 @@
-from .models import Marca, Carro, Funcionario
+from .models import Marca, Carro, Funcionario, Especie, Cercado, Dinossauro
 
 
 class MarcaService:
@@ -28,4 +28,33 @@ class FuncionarioService:
         return Funcionario.objects.create(
             nome=nome,
             cargo=cargo
+        )
+
+class EspecieService:
+    @staticmethod
+    def criar(nome, dieta, nivel_periculosidade):
+        return Especie.objects.create(
+            nome=nome,
+            dieta=dieta,
+            nivel_periculosidade=nivel_periculosidade
+        )
+
+class CercadoService:
+    @staticmethod
+    def criar(nome, voltagem_cerca, dimensao_m2, funcionario):
+        return Cercado.objects.create(
+            nome=nome,
+            voltagem_cerca=voltagem_cerca,
+            dimensao_m2=dimensao_m2,
+            funcionario=funcionario
+        )
+
+class DinossauroService:
+    @staticmethod
+    def criar(nome, data_nascimento, especie, cercado):
+        return Dinossauro.objects.create(
+            nome=nome,
+            data_nascimento=data_nascimento,
+            especie=especie,
+            cercado=cercado
         )

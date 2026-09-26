@@ -11,6 +11,14 @@ from api.serializers import (
     DinossauroSerializer,
 )
 from api.filters import EspecieFilter, DinossauroFilter
+from api.service import (
+    MarcaService,
+    CarroService,
+    FuncionarioService,
+    EspecieService,
+    CercadoService,
+    DinossauroService,
+)
 
 
 class CarroViewSet(viewsets.ModelViewSet):
@@ -23,15 +31,25 @@ class CarroViewSet(viewsets.ModelViewSet):
     # Define quais campos do modelo Carro aceitarão filtro na URL
     filterset_fields = ['ano', 'marca']
 
+#sobrescreve o método perform_create para usar o serviço de criação de Carro
+    def perform_create(self, serializer):
+        serializer.instance = CarroService.criar(**serializer.validated_data)
+
 
 class MarcaViewSet(viewsets.ModelViewSet):
     queryset = Marca.objects.all()
     serializer_class = MarcaSerializer
 
+    def perform_create(self, serializer):
+        serializer.instance = MarcaService.criar(**serializer.validated_data)
+
 
 class FuncionarioViewSet(viewsets.ModelViewSet):
     queryset = Funcionario.objects.all()
     serializer_class = FuncionarioSerializer
+
+    def perform_create(self, serializer):
+        serializer.instance = FuncionarioService.criar(**serializer.validated_data)
 
 
 class EspecieViewSet(viewsets.ModelViewSet):
@@ -42,6 +60,9 @@ class EspecieViewSet(viewsets.ModelViewSet):
     filter_backends = [DjangoFilterBackend]
     filterset_class = EspecieFilter
 
+    def perform_create(self, serializer):
+        serializer.instance = EspecieService.criar(**serializer.validated_data)
+
 
 class CercadoViewSet(viewsets.ModelViewSet):
     # select_related evita consultas extras ao banco ao serializar o funcionario aninhado
@@ -51,6 +72,9 @@ class CercadoViewSet(viewsets.ModelViewSet):
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['funcionario']
 
+    def perform_create(self, serializer):
+        serializer.instance = CercadoService.criar(**serializer.validated_data)
+
 
 class DinossauroViewSet(viewsets.ModelViewSet):
     queryset = Dinossauro.objects.select_related("especie", "cercado").all()
@@ -58,3 +82,6 @@ class DinossauroViewSet(viewsets.ModelViewSet):
 
     filter_backends = [DjangoFilterBackend]
     filterset_class = DinossauroFilter
+
+    def perform_create(self, serializer):
+        serializer.instance = DinossauroService.criar(**serializer.validated_data)
