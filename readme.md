@@ -61,10 +61,12 @@ pip install -r requirements.txt
 ```
 
 ### 4. Configurar Variáveis de Ambiente
-Crie um arquivo `.env` na raiz do projeto com sua própria `SECRET_KEY`:
+Crie um arquivo `.env` na raiz do projeto com sua própria `SECRET_KEY` e o status do `DEBUG`:
 ```
 SECRET_KEY=sua-chave-secreta-aqui
+DEBUG=True
 ```
+Se `DEBUG` não for informado, o sistema assume `False` por segurança. Opcionalmente, `ALLOWED_HOSTS` pode ser definido como uma lista separada por vírgulas (padrão: `localhost,127.0.0.1`).
 
 ### 5. Aplicar as Migrações e Rodar o Servidor
 ```bash

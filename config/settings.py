@@ -33,9 +33,12 @@ load_dotenv()
 
 
 SECRET_KEY = os.getenv('SECRET_KEY')
-DEBUG = True
 
-ALLOWED_HOSTS = []
+# Só liga o DEBUG se o .env disser explicitamente DEBUG=True
+DEBUG = os.getenv('DEBUG', 'False').lower() == 'true'
+
+# Com DEBUG desligado o Django recusa qualquer host que não esteja nesta lista
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
 
 
 # Application definition
@@ -68,6 +71,8 @@ REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': (
         'django_filters.rest_framework.DjangoFilterBackend',
     ),
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10,
 }
 
 ROOT_URLCONF = "config.urls"
