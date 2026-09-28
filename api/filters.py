@@ -1,5 +1,5 @@
 import django_filters
-from .models import Carro, Especie, Dinossauro
+from .models import Carro, Especie, Dinossauro, Turista
 
 class CarroFilter(django_filters.FilterSet):
     # Busca por parte do nome do modelo (case-insensitive)
@@ -28,3 +28,11 @@ class DinossauroFilter(django_filters.FilterSet):
     class Meta:
         model = Dinossauro
         fields = ['nome', 'especie', 'cercado']
+
+class TuristaFilter(django_filters.FilterSet):
+    # Busca por parte do nome do turista (case-insensitive)
+    nome = django_filters.CharFilter(field_name="nome", lookup_expr="icontains")
+
+    class Meta:
+        model = Turista
+        fields = ['nome', 'carro']

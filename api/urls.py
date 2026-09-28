@@ -5,6 +5,7 @@ from .views import (
     EspecieViewSet,
     CercadoViewSet,
     DinossauroViewSet,
+    TuristaViewSet,
 )
 
 router = DefaultRouter()
@@ -37,6 +38,12 @@ router.register(
     r"dinossauros",
     DinossauroViewSet,
     basename="dinossauro"
+)
+
+router.register(
+    r"turistas",
+    TuristaViewSet,
+    basename="turista"
 )
 
 urlpatterns = router.urls

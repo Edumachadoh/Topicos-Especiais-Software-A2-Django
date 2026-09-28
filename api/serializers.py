@@ -1,9 +1,10 @@
 from rest_framework import serializers
 from .models import Carro
+from .service import TuristaService
 
 
 # serializer de dinossauros (NOVOS)
-from .models import Especie, Cercado, Dinossauro, Funcionario
+from .models import Especie, Cercado, Dinossauro, Funcionario, Turista
 
 
 class EspecieSerializer(serializers.ModelSerializer):
@@ -15,7 +16,7 @@ class EspecieSerializer(serializers.ModelSerializer):
 class FuncionarioSerializer(serializers.ModelSerializer):
     class Meta:
         model = Funcionario
-        fields = ['id', 'nome', 'cargo']
+        fields = ['id', 'nome', 'data_nascimento', 'cargo']
 
 
 class CarroSerializer(serializers.ModelSerializer):
@@ -36,6 +37,34 @@ class CarroSerializer(serializers.ModelSerializer):
             "funcionario",
             "funcionario_id",
         ]
+
+
+class TuristaSerializer(serializers.ModelSerializer):
+    idade = serializers.SerializerMethodField()
+
+    # Carro de turismo que o turista está usando: aninhado na leitura, só o ID na escrita
+    carro = CarroSerializer(read_only=True)
+    carro_id = serializers.PrimaryKeyRelatedField(
+        source="carro",
+        queryset=Carro.objects.all(),
+        write_only=True,
+        required=False,
+        allow_null=True
+    )
+
+    class Meta:
+        model = Turista
+        fields = [
+            "id",
+            "nome",
+            "data_nascimento",
+            "idade",
+            "carro",
+            "carro_id",
+        ]
+
+    def get_idade(self, obj):
+        return TuristaService.calcular_idade(obj.data_nascimento)
 
 
 class CercadoSerializer(serializers.ModelSerializer):

@@ -2,21 +2,23 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets
 from rest_framework.exceptions import ValidationError
 
-from api.models import Carro, Funcionario, Especie, Cercado, Dinossauro
+from api.models import Carro, Funcionario, Especie, Cercado, Dinossauro, Turista
 from api.serializers import (
     CarroSerializer,
     FuncionarioSerializer,
     EspecieSerializer,
     CercadoSerializer,
     DinossauroSerializer,
+    TuristaSerializer,
 )
-from api.filters import CarroFilter, EspecieFilter, DinossauroFilter
+from api.filters import CarroFilter, EspecieFilter, DinossauroFilter, TuristaFilter
 from api.service import (
     CarroService,
     FuncionarioService,
     EspecieService,
     CercadoService,
     DinossauroService,
+    TuristaService,
 )
 
 
@@ -92,5 +94,32 @@ class DinossauroViewSet(viewsets.ModelViewSet):
 
         try:
             DinossauroService.atualizar(instance, nome, data_nascimento, especie, cercado)
+        except ValueError as e:
+            raise ValidationError(str(e))
+
+
+class TuristaViewSet(viewsets.ModelViewSet):
+    queryset = Turista.objects.select_related("carro").all()
+    serializer_class = TuristaSerializer
+
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = TuristaFilter
+
+    def perform_create(self, serializer):
+        try:
+            serializer.instance = TuristaService.criar(**serializer.validated_data)
+        except ValueError as e:
+            raise ValidationError(str(e))
+
+    def perform_update(self, serializer):
+        instance = serializer.instance
+        dados = serializer.validated_data
+
+        nome = dados.get('nome', instance.nome)
+        data_nascimento = dados.get('data_nascimento', instance.data_nascimento)
+        carro = dados.get('carro', instance.carro)
+
+        try:
+            TuristaService.atualizar(instance, nome, data_nascimento, carro)
         except ValueError as e:
             raise ValidationError(str(e))
