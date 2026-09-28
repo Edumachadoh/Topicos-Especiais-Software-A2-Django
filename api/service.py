@@ -5,12 +5,35 @@ from .models import Carro, Funcionario, Especie, Cercado, Dinossauro, Turista
 
 class CarroService:
     @staticmethod
+    def validar_mudanca_tipo(instance, novo_tipo):
+        """Não deixa tirar um carro de 'Turismo' se ele ainda tem turistas vinculados."""
+        if novo_tipo == instance.tipo:
+            return
+
+        if novo_tipo != 'T' and instance.turistas.exists():
+            raise ValueError(
+                f"Não é possível mudar o tipo do carro '{instance.modelo}' para "
+                f"'{dict(Carro.TIPOS_CHOICES)[novo_tipo]}', pois ainda há turistas "
+                f"vinculados a ele."
+            )
+
+    @staticmethod
     def criar(modelo, tipo, funcionario):
         return Carro.objects.create(
             modelo=modelo,
             tipo=tipo,
             funcionario=funcionario
         )
+
+    @staticmethod
+    def atualizar(instance, modelo, tipo, funcionario):
+        CarroService.validar_mudanca_tipo(instance, tipo)
+
+        instance.modelo = modelo
+        instance.tipo = tipo
+        instance.funcionario = funcionario
+        instance.save()
+        return instance
 
 class FuncionarioService:
     @staticmethod
@@ -23,12 +46,49 @@ class FuncionarioService:
 
 class EspecieService:
     @staticmethod
+    def validar_mudanca_dieta(instance, nova_dieta):
+        """Não deixa mudar a dieta se isso gerar conflito em algum cercado onde já há dinossauros dessa espécie."""
+        if nova_dieta == instance.dieta:
+            return
+
+        cercados_com_essa_especie = Cercado.objects.filter(
+            dinossauros__especie=instance
+        ).distinct()
+
+        for cercado in cercados_com_essa_especie:
+            outros_dinos = Dinossauro.objects.filter(cercado=cercado) \
+                .exclude(especie=instance) \
+                .select_related('especie')
+
+            for dino in outros_dinos:
+                eh_carnivoro_novo = nova_dieta == 'C'
+                eh_carnivoro_existente = dino.especie.dieta == 'C'
+
+                if eh_carnivoro_novo != eh_carnivoro_existente:
+                    raise ValueError(
+                        f"Não é possível mudar a dieta de '{instance.nome}' para "
+                        f"'{dict(Especie.DIETA_CHOICES)[nova_dieta]}', pois no cercado "
+                        f"'{cercado.nome}' já existe o dinossauro '{dino.nome}', de dieta "
+                        f"incompatível ('{dino.especie.get_dieta_display()}')."
+                    )
+
+    @staticmethod
     def criar(nome, dieta, nivel_periculosidade):
         return Especie.objects.create(
             nome=nome,
             dieta=dieta,
             nivel_periculosidade=nivel_periculosidade
         )
+
+    @staticmethod
+    def atualizar(instance, nome, dieta, nivel_periculosidade):
+        EspecieService.validar_mudanca_dieta(instance, dieta)
+
+        instance.nome = nome
+        instance.dieta = dieta
+        instance.nivel_periculosidade = nivel_periculosidade
+        instance.save()
+        return instance
 
 class CercadoService:
     @staticmethod

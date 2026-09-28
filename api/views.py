@@ -35,6 +35,19 @@ class CarroViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.instance = CarroService.criar(**serializer.validated_data)
 
+    def perform_update(self, serializer):
+        instance = serializer.instance
+        dados = serializer.validated_data
+
+        modelo = dados.get('modelo', instance.modelo)
+        tipo = dados.get('tipo', instance.tipo)
+        funcionario = dados.get('funcionario', instance.funcionario)
+
+        try:
+            CarroService.atualizar(instance, modelo, tipo, funcionario)
+        except ValueError as e:
+            raise ValidationError(str(e))
+
 
 class FuncionarioViewSet(viewsets.ModelViewSet):
     queryset = Funcionario.objects.all()
@@ -54,6 +67,19 @@ class EspecieViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.instance = EspecieService.criar(**serializer.validated_data)
+
+    def perform_update(self, serializer):
+        instance = serializer.instance
+        dados = serializer.validated_data
+
+        nome = dados.get('nome', instance.nome)
+        dieta = dados.get('dieta', instance.dieta)
+        nivel_periculosidade = dados.get('nivel_periculosidade', instance.nivel_periculosidade)
+
+        try:
+            EspecieService.atualizar(instance, nome, dieta, nivel_periculosidade)
+        except ValueError as e:
+            raise ValidationError(str(e))
 
 
 class CercadoViewSet(viewsets.ModelViewSet):
