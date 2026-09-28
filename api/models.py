@@ -20,17 +20,6 @@ class Carro(models.Model):
     def __str__(self):
         return f"{self.modelo} - {self.get_tipo_display()}"
     
-class Pessoa(models.Model):
-    """Campos e regras comuns a qualquer pessoa do domínio (funcionário, turista, etc.)."""
-    nome = models.CharField(max_length=100)
-    data_nascimento = models.DateField()
-
-    class Meta:
-        abstract = True
-
-    def __str__(self):
-        return self.nome
-
 class Especie(models.Model):
     DIETA_CHOICES = [
         ('C', 'Carnívoro'),
@@ -45,21 +34,13 @@ class Especie(models.Model):
     def __str__(self):
         return f"{self.nome} ({self.dieta}) - Periculosidade: {self.nivel_periculosidade}"
 
-class Funcionario(Pessoa):
+class Funcionario(models.Model):
+    nome = models.CharField(max_length=100)
+    data_nascimento = models.DateField()
     cargo = models.CharField(max_length=100)
 
     def __str__(self):
         return f"{self.nome} - {self.cargo}"
-
-class Turista(Pessoa):
-    # Carro de turismo que o turista está usando no momento (opcional)
-    carro = models.ForeignKey(
-        Carro,
-        on_delete=models.SET_NULL,#não deletar o turista caso o carro seja deletado
-        null=True,
-        blank=True,
-        related_name="turistas"
-    )
 
 class Cercado(models.Model):
     nome = models.CharField(max_length=100)
