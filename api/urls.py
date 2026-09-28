@@ -1,6 +1,5 @@
 from rest_framework.routers import DefaultRouter
 from .views import (
-    MarcaViewSet,
     CarroViewSet,
     FuncionarioViewSet,
     EspecieViewSet,
@@ -9,12 +8,6 @@ from .views import (
 )
 
 router = DefaultRouter()
-
-router.register(
-    r"marcas",
-    MarcaViewSet,
-    basename="marca"
-)
 
 router.register(
     r"carros",

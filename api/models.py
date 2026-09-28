@@ -1,31 +1,25 @@
 from django.db import models
 
 
-class Marca(models.Model):
-    nome = models.CharField(max_length=100)
-    pais_origem = models.CharField(max_length=100)
-
-    def __str__(self):
-        return self.nome
-
 class Carro(models.Model):
-    modelo = models.CharField(max_length=100)
-    ano = models.IntegerField()
-    preco = models.DecimalField(
-        max_digits=10,
-        decimal_places=2
-    )
+    TIPOS_CHOICES = [
+        ('G','Guarda'),
+        ('T','Turismo'),
 
-    marca = models.ForeignKey(
-        Marca,
+    ]
+    modelo = models.CharField(max_length=100)
+    tipo = models.CharField(max_length=1, choices=TIPOS_CHOICES)
+
+    # Funcionário responsável por dirigir/usar o veículo no parque
+    funcionario = models.ForeignKey(
+        "Funcionario",
         on_delete=models.CASCADE,
         related_name="carros"
     )
 
     def __str__(self):
-        return f"{self.modelo} ({self.ano})"
-
-# novas classes, antigas não retiradas para não dar erro
+        return f"{self.modelo} - {self.get_tipo_display()}"
+    
 class Especie(models.Model):
     DIETA_CHOICES = [
         ('C', 'Carnívoro'),
@@ -52,7 +46,6 @@ class Cercado(models.Model):
     voltagem_cerca = models.IntegerField(help_text="Voltagem atual em kV")
     dimensao_m2 = models.FloatField(help_text="Dimensão em m2")
     
-    # Nova Chave Estrangeira (1:N)
     funcionario = models.ForeignKey(
         Funcionario,
         on_delete=models.CASCADE, 

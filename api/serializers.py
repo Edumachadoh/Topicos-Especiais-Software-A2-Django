@@ -1,35 +1,5 @@
 from rest_framework import serializers
-from .models import Marca, Carro
-
-
-class MarcaSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Marca
-        fields = [
-            "id",
-            "nome",
-            "pais_origem",
-        ]
-
-
-class CarroSerializer(serializers.ModelSerializer):
-    marca = MarcaSerializer(read_only=True)
-    marca_id = serializers.PrimaryKeyRelatedField(
-        source="marca",
-        queryset=Marca.objects.all(),
-        write_only=True
-    )
-
-    class Meta:
-        model = Carro
-        fields = [
-            "id",
-            "modelo",
-            "ano",
-            "preco",
-            "marca",
-            "marca_id",
-        ]
+from .models import Carro
 
 
 # serializer de dinossauros (NOVOS)
@@ -46,6 +16,26 @@ class FuncionarioSerializer(serializers.ModelSerializer):
     class Meta:
         model = Funcionario
         fields = ['id', 'nome', 'cargo']
+
+
+class CarroSerializer(serializers.ModelSerializer):
+    # Funcionário responsável pelo veículo: aninhado na leitura, só o ID na escrita
+    funcionario = FuncionarioSerializer(read_only=True)
+    funcionario_id = serializers.PrimaryKeyRelatedField(
+        source="funcionario",
+        queryset=Funcionario.objects.all(),
+        write_only=True
+    )
+
+    class Meta:
+        model = Carro
+        fields = [
+            "id",
+            "modelo",
+            "tipo",
+            "funcionario",
+            "funcionario_id",
+        ]
 
 
 class CercadoSerializer(serializers.ModelSerializer):

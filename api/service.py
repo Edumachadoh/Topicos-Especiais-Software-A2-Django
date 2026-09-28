@@ -1,25 +1,13 @@
-from .models import Marca, Carro, Funcionario, Especie, Cercado, Dinossauro
+from .models import Carro, Funcionario, Especie, Cercado, Dinossauro
 
-
-class MarcaService:
-    @staticmethod
-    def criar(nome, pais_origem):
-        return Marca.objects.create(
-            nome=nome,
-            pais_origem=pais_origem
-        )
-    @staticmethod
-    def buscar_por_id(marca_id):
-        return Marca.objects.get(id=marca_id)
 
 class CarroService:
     @staticmethod
-    def criar(modelo, ano, preco, marca):
+    def criar(modelo, tipo, funcionario):
         return Carro.objects.create(
             modelo=modelo,
-            ano=ano,
-            preco=preco,
-            marca=marca
+            tipo=tipo,
+            funcionario=funcionario
         )
 
 class FuncionarioService:
@@ -51,9 +39,13 @@ class CercadoService:
 
 class DinossauroService:
     @staticmethod
-    def validar_dieta_compativel(especie, cercado):
+    def validar_dieta_compativel(especie, cercado, ignorar_dinossauro_id=None):
         """Carnívoros não podem dividir cercado com Herbívoros/Onívoros, e vice-versa."""
         dinos_no_cercado = Dinossauro.objects.filter(cercado=cercado).select_related('especie')
+
+        if ignorar_dinossauro_id is not None:
+            # Tirar o ID do dinossauro que já está no cercado da lista de verificação
+            dinos_no_cercado = dinos_no_cercado.exclude(id=ignorar_dinossauro_id)
 
         for dino in dinos_no_cercado:
             dieta_existente = dino.especie.dieta
@@ -77,3 +69,18 @@ class DinossauroService:
             especie=especie,
             cercado=cercado
         )
+
+    @staticmethod
+    def atualizar(instance, nome, data_nascimento, especie, cercado):
+        DinossauroService.validar_dieta_compativel(
+            especie=especie,
+            cercado=cercado,
+            ignorar_dinossauro_id=instance.id
+        )
+
+        instance.nome = nome
+        instance.data_nascimento = data_nascimento
+        instance.especie = especie
+        instance.cercado = cercado
+        instance.save()
+        return instance

@@ -2,18 +2,16 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets
 from rest_framework.exceptions import ValidationError
 
-from api.models import Carro, Marca, Funcionario, Especie, Cercado, Dinossauro
+from api.models import Carro, Funcionario, Especie, Cercado, Dinossauro
 from api.serializers import (
     CarroSerializer,
-    MarcaSerializer,
     FuncionarioSerializer,
     EspecieSerializer,
     CercadoSerializer,
     DinossauroSerializer,
 )
-from api.filters import EspecieFilter, DinossauroFilter
+from api.filters import CarroFilter, EspecieFilter, DinossauroFilter
 from api.service import (
-    MarcaService,
     CarroService,
     FuncionarioService,
     EspecieService,
@@ -23,26 +21,17 @@ from api.service import (
 
 
 class CarroViewSet(viewsets.ModelViewSet):
-    queryset = Carro.objects.select_related("marca").all()
+    queryset = Carro.objects.select_related("funcionario").all()
     serializer_class = CarroSerializer
 
     # Habilita o backend de filtros nesta view
     filter_backends = [DjangoFilterBackend]
 
-    # Define quais campos do modelo Carro aceitarão filtro na URL
-    filterset_fields = ['ano', 'marca']
+    # Filtros por tipo/funcionario (igualdade) e nome do modelo (icontains)
+    filterset_class = CarroFilter
 
-#sobrescreve o método perform_create para usar o serviço de criação de Carro
     def perform_create(self, serializer):
         serializer.instance = CarroService.criar(**serializer.validated_data)
-
-
-class MarcaViewSet(viewsets.ModelViewSet):
-    queryset = Marca.objects.all()
-    serializer_class = MarcaSerializer
-
-    def perform_create(self, serializer):
-        serializer.instance = MarcaService.criar(**serializer.validated_data)
 
 
 class FuncionarioViewSet(viewsets.ModelViewSet):
@@ -87,5 +76,21 @@ class DinossauroViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         try:
             serializer.instance = DinossauroService.criar(**serializer.validated_data)
+        except ValueError as e:
+            raise ValidationError(str(e))
+
+    def perform_update(self, serializer):
+        instance = serializer.instance
+        dados = serializer.validated_data
+
+        # PATCH manda só os campos alterados; usa o valor atual da instância
+        # para os que não vieram na requisição.
+        nome = dados.get('nome', instance.nome)
+        data_nascimento = dados.get('data_nascimento', instance.data_nascimento)
+        especie = dados.get('especie', instance.especie)
+        cercado = dados.get('cercado', instance.cercado)
+
+        try:
+            DinossauroService.atualizar(instance, nome, data_nascimento, especie, cercado)
         except ValueError as e:
             raise ValidationError(str(e))
